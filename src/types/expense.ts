@@ -1,6 +1,6 @@
 export type UserRole = 'ADMIN' | 'MANAGER' | 'EMPLOYEE';
 
-export type ExpenseCategory = 'TRAVEL' | 'MEALS' | 'LODGING' | 'OTHER';
+export type ExpenseCategory = 'FIELDWORK' | 'MEALS' | 'LODGING' | 'OTHER'| 'ADMIN';
 
 export type ExpenseStatus = 'PENDING' | 'APPROVED' | 'REJECTED' | 'REIMBURSED';
 
@@ -31,6 +31,11 @@ export interface ExpenseRule {
     id: string;
     expenseTypeId: string;
     amount: number;
+    conditions?: {
+        dropdownTypeId: string;
+        optionId: string;
+        amount: number;
+    }[];
 }
 
 export interface ExpensePolicy {
@@ -57,6 +62,20 @@ export interface ExpenseReport {
     approvedAt?: string;
     rejectionReason?: string;
     reimbursedAt?: string;
+}
+
+export interface DropdownOption {
+    id: string;
+    value: string;
+    isActive: boolean;
+}
+
+export interface DropdownType {
+    id: string;
+    name: string;
+    description: string;
+    options: DropdownOption[];
+    isActive: boolean;
 }
 
 // Mock data for static usage
@@ -89,21 +108,63 @@ export const mockExpenseTypes: ExpenseType[] = [
         id: '1',
         name: 'HQ',
         description: 'Expenses related to headquarters operations',
-        category: 'TRAVEL',
+        category: 'FIELDWORK',
         isActive: true
     },
     {
         id: '2',
         name: 'Ex-HQ',
         description: 'Expenses outside headquarters',
-        category: 'LODGING',
+        category: 'FIELDWORK',
         isActive: true
     },
     {
         id: '3',
         name: 'Hill-station',
         description: 'Expenses related to hill station visits',
-        category: 'TRAVEL',
+        category: 'OTHER',
+        isActive: true
+    },
+    {
+        id: '4',
+        name: 'OS',
+        description: 'Expenses related to hill station visits',
+        category: 'FIELDWORK',
+        isActive: true
+    },
+    {
+        id: '5',
+        name: 'Meeting with Accomadation',
+        description: 'Expenses related to hill station visits',
+        category: 'ADMIN',
+        isActive: true
+    },
+    {
+        id: '6',
+        name: 'Meeting without Accomadation',
+        description: 'Expenses related to hill station visits',
+        category: 'ADMIN',
+        isActive: true
+    },
+    {
+        id: '7',
+        name: 'Petrol Allownce',
+        description: 'Expenses related to hill station visits',
+        category: 'OTHER',
+        isActive: true
+    },
+    {
+        id: '8',
+        name: 'Miscellanous',
+        description: 'Expenses related to hill station visits',
+        category: 'OTHER',
+        isActive: true
+    },
+    {
+        id: '9',
+        name: 'Local conveyance',
+        description: 'Expenses related to hill station visits',
+        category: 'OTHER',
         isActive: true
     }
 ];
@@ -125,14 +186,6 @@ export const mockPolicies: ExpensePolicy[] = [
         description: 'Policy covering all food and dining expenses',
         rules: []
     },
-    {
-        id: '3',
-        name: 'Accommodation Policy',
-        applicableRole: 'MANAGER',
-        applicableGrade: 'MS4',
-        description: 'Policy for hotel and accommodation expenses',
-        rules: []
-    }
 ];
 
 export const mockExpenses: ExpenseReport[] = [
@@ -161,5 +214,31 @@ export const mockExpenses: ExpenseReport[] = [
         submittedAt: '2024-03-17T09:00:00Z',
         approvedBy: '2',
         approvedAt: '2024-03-17T14:00:00Z'
+    }
+];
+
+export const mockDropdownTypes: DropdownType[] = [
+    {
+        id: '1',
+        name: 'Cities',
+        description: 'Indian Cities',
+        isActive: true,
+        options: [
+            { id: '1', value: 'Mumbai', isActive: true },
+            { id: '2', value: 'Delhi', isActive: true },
+            { id: '3', value: 'Bangalore', isActive: true },
+            { id: '4', value: 'Chennai', isActive: true }
+        ]
+    },
+    {
+        id: '2',
+        name: 'Products',
+        description: 'Available Products',
+        isActive: true,
+        options: [
+            { id: '1', value: 'Product A', isActive: true },
+            { id: '2', value: 'Product B', isActive: true },
+            { id: '3', value: 'Product C', isActive: true }
+        ]
     }
 ]; 

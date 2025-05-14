@@ -8,11 +8,11 @@ const ExpenseTypeManagement: React.FC = () => {
     const [newType, setNewType] = useState<Partial<ExpenseType>>({
         name: '',
         description: '',
-        category: 'TRAVEL',
+        category: 'FIELDWORK',
         isActive: true
     });
 
-    const availableCategories: ExpenseCategory[] = ['TRAVEL', 'MEALS', 'LODGING', 'OTHER'];
+    const availableCategories: ExpenseCategory[] = ['FIELDWORK', 'MEALS', 'LODGING', 'OTHER','ADMIN'];
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
@@ -32,7 +32,7 @@ const ExpenseTypeManagement: React.FC = () => {
         setNewType({
             name: '',
             description: '',
-            category: 'TRAVEL',
+            category: 'FIELDWORK',
             isActive: true
         });
     };
@@ -195,7 +195,7 @@ const ExpenseTypeManagement: React.FC = () => {
                                 setNewType({
                                     name: '',
                                     description: '',
-                                    category: 'TRAVEL',
+                                    category: 'FIELDWORK',
                                     isActive: true
                                 });
                             }}

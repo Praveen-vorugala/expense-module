@@ -9,7 +9,10 @@ import {
     ExpenseStatus,
     ExpenseCategory,
     ExpenseType,
-    mockExpenseTypes
+    mockExpenseTypes,
+    mockDropdownTypes,
+    DropdownType,
+    DropdownOption
 } from '../types/expense';
 
 interface ExpenseContextType {
@@ -17,6 +20,7 @@ interface ExpenseContextType {
     policies: ExpensePolicy[];
     expenses: ExpenseReport[];
     expenseTypes: ExpenseType[];
+    dropdownTypes: DropdownType[];
     login: (email: string) => void;
     logout: () => void;
     addExpense: (expense: Omit<ExpenseReport, 'id' | 'status' | 'submittedAt'>) => void;
@@ -26,6 +30,10 @@ interface ExpenseContextType {
     addExpenseType: (expenseType: Omit<ExpenseType, 'id'>) => void;
     updateExpenseType: (expenseType: ExpenseType) => void;
     toggleExpenseTypeStatus: (expenseTypeId: string) => void;
+    addDropdownType: (type: Omit<DropdownType, 'id'>) => void;
+    updateDropdownType: (type: DropdownType) => void;
+    addDropdownOption: (typeId: string, option: Omit<DropdownOption, 'id'>) => void;
+    updateDropdownOption: (typeId: string, option: DropdownOption) => void;
 }
 
 const ExpenseContext = createContext<ExpenseContextType | undefined>(undefined);
@@ -35,6 +43,7 @@ export const ExpenseProvider: React.FC<{ children: ReactNode }> = ({ children })
     const [policies, setPolicies] = useState<ExpensePolicy[]>(mockPolicies);
     const [expenses, setExpenses] = useState<ExpenseReport[]>(mockExpenses);
     const [expenseTypes, setExpenseTypes] = useState<ExpenseType[]>(mockExpenseTypes);
+    const [dropdownTypes, setDropdownTypes] = useState<DropdownType[]>(mockDropdownTypes);
 
     const login = (email: string) => {
         const user = mockUsers.find(u => u.email === email);
@@ -129,12 +138,56 @@ export const ExpenseProvider: React.FC<{ children: ReactNode }> = ({ children })
         ));
     };
 
+    const addDropdownType = (type: Omit<DropdownType, 'id'>) => {
+        const newType: DropdownType = {
+            ...type,
+            id: Date.now().toString()
+        };
+        setDropdownTypes(prev => [...prev, newType]);
+    };
+
+    const updateDropdownType = (type: DropdownType) => {
+        setDropdownTypes(prev =>
+            prev.map(t => (t.id === type.id ? type : t))
+        );
+    };
+
+    const addDropdownOption = (typeId: string, option: Omit<DropdownOption, 'id'>) => {
+        const newOption: DropdownOption = {
+            ...option,
+            id: Date.now().toString()
+        };
+        setDropdownTypes(prev =>
+            prev.map(type =>
+                type.id === typeId
+                    ? { ...type, options: [...type.options, newOption] }
+                    : type
+            )
+        );
+    };
+
+    const updateDropdownOption = (typeId: string, option: DropdownOption) => {
+        setDropdownTypes(prev =>
+            prev.map(type =>
+                type.id === typeId
+                    ? {
+                          ...type,
+                          options: type.options.map(opt =>
+                              opt.id === option.id ? option : opt
+                          )
+                      }
+                    : type
+            )
+        );
+    };
+
     return (
         <ExpenseContext.Provider value={{
             currentUser,
             policies,
             expenses,
             expenseTypes,
+            dropdownTypes,
             login,
             logout,
             addExpense,
@@ -143,7 +196,11 @@ export const ExpenseProvider: React.FC<{ children: ReactNode }> = ({ children })
             updatePolicy,
             addExpenseType,
             updateExpenseType,
-            toggleExpenseTypeStatus
+            toggleExpenseTypeStatus,
+            addDropdownType,
+            updateDropdownType,
+            addDropdownOption,
+            updateDropdownOption
         }}>
             {children}
         </ExpenseContext.Provider>

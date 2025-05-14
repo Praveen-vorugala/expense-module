@@ -8,6 +8,7 @@ import ExpenseApproval from './components/ExpenseApproval';
 import PolicyManagement from './components/PolicyManagement';
 import ExpenseReports from './components/ExpenseReports';
 import ExpenseTypeManagement from './components/ExpenseTypeManagement';
+import DropdownTypesPage from './pages/DropdownTypesPage';
 import './App.css';
 
 const ProtectedRoute: React.FC<{
@@ -85,6 +86,15 @@ const AppRoutes: React.FC = () => {
           element={
             <ProtectedRoute allowedRoles={['ADMIN']}>
               <ExpenseReports />
+            </ProtectedRoute>
+          }
+        />
+        
+        <Route
+          path="/dropdown-types"
+          element={
+            <ProtectedRoute allowedRoles={['ADMIN']}>
+              <DropdownTypesPage />
             </ProtectedRoute>
           }
         />

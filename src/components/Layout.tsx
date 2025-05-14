@@ -15,6 +15,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
         { name: 'Approve Expenses', href: '/approve-expenses', roles: ['MANAGER'] },
         { name: 'Manage Policies', href: '/policies', roles: ['ADMIN'] },
         { name: 'Expense Types', href: '/expense-types', roles: ['ADMIN'] },
+        { name: 'Dropdown Types', href: '/dropdown-types', roles: ['ADMIN'] },
         { name: 'Reports', href: '/reports', roles: ['ADMIN'] },
     ];
 
