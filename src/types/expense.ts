@@ -214,6 +214,89 @@ export const mockPolicies: ExpensePolicy[] = [
             { propertyType: 'GRADE', value: 'MS3' }
         ],
         rules: []
+    },
+    {
+        "name": "New Policy for ms 1",
+        "description": "For ms1",
+        "frequency": "DAILY",
+        "conditions": [
+            {
+                "propertyType": "ROLE",
+                "value": "EMPLOYEE"
+            },
+            {
+                "propertyType": "GRADE",
+                "value": "MS1"
+            }
+        ],
+        "rules": [
+            {
+                "id": "1747306007609-1",
+                "groupId": "1747306007609",
+                "expenseTypeId": "1",
+                "valueType": "CONSTANT",
+                "amount": 325,
+                "userConditions": []
+            },
+            {
+                "id": "1747306007609-2",
+                "groupId": "1747306007609",
+                "expenseTypeId": "2",
+                "valueType": "CONSTANT",
+                "amount": 325,
+                "userConditions": []
+            },
+            {
+                "id": "1747306007609-4",
+                "groupId": "1747306007609",
+                "expenseTypeId": "4",
+                "valueType": "CONSTANT",
+                "amount": 800,
+                "userConditions": []
+            },
+            {
+                "id": "1747306007609-5",
+                "groupId": "1747306007609",
+                "expenseTypeId": "5",
+                "valueType": "CONSTANT",
+                "amount": 200,
+                "userConditions": []
+            },
+            {
+                "id": "1747306007609-6",
+                "groupId": "1747306007609",
+                "expenseTypeId": "6",
+                "valueType": "CONSTANT",
+                "amount": 900,
+                "userConditions": []
+            },
+            {
+                "id": "1747306017967",
+                "expenseTypeId": "8",
+                "valueType": "ACTUAL",
+                "amount": 0,
+                "operator": "<",
+                "limitAmount": 1000,
+                "userConditions": []
+            },
+            {
+                "id": "1747306031250",
+                "expenseTypeId": "9",
+                "valueType": "ACTUAL",
+                "amount": 0,
+                "operator": "<",
+                "limitAmount": 500,
+                "userConditions": []
+            },
+            {
+                "id": "1747311621860",
+                "expenseTypeId": "7",
+                "valueType": "CALCULATED",
+                "amount": 0,
+                "userConditions": []
+            }
+        ],
+        "id": "3"
     }
 ];
 

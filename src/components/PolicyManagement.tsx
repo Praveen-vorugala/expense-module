@@ -73,10 +73,10 @@ const PolicyManagement: React.FC = () => {
     ];
 
     useEffect(() => {
-        console.log(selectedCategories);
-        console.log(expenseTypes);
+        console.log(policies);
         
-    },[selectedCategories]);
+        
+    },[policies]);
 
     const handleAddRule = (policy: ExpensePolicy | null = null) => {
         if (policy) {

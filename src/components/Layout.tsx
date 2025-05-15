@@ -11,7 +11,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
 
     const navigation = [
         { name: 'Dashboard', href: '/', roles: ['ADMIN', 'MANAGER', 'EMPLOYEE'] },
-        { name: 'Submit Expense', href: '/submit-expense', roles: ['EMPLOYEE', 'MANAGER'] },
+        { name: 'Add Report', href: '/add-report', roles: ['EMPLOYEE', 'MANAGER'] },
         { name: 'Approve Expenses', href: '/approve-expenses', roles: ['MANAGER'] },
         { name: 'Manage Policies', href: '/policies', roles: ['ADMIN'] },
         { name: 'Expense Types', href: '/expense-types', roles: ['ADMIN'] },
