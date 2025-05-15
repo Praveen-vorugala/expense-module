@@ -6,6 +6,12 @@ export type ExpenseStatus = 'PENDING' | 'APPROVED' | 'REJECTED' | 'REIMBURSED';
 
 export type Grade = 'MS1' | 'MS2' | 'MS3' | 'MS4' | 'MS5';
 
+export type PolicyFrequency = 'DAILY' | 'WEEKLY' | 'FORTNIGHTLY' | 'MONTHLY' | 'QUARTERLY' | 'HALF_YEARLY' | 'ANNUALLY';
+
+export type RuleValueType = 'ACTUAL' | 'CONSTANT' | 'CALCULATED';
+
+export type ComparisonOperator = '<' | '>' | '<=' | '>=';
+
 export interface ExpenseType {
     id: string;
     name: string;
@@ -29,8 +35,13 @@ export interface ExpenseTypeLimit {
 
 export interface ExpenseRule {
     id: string;
+    groupId?: string;
     expenseTypeId: string;
+    valueType: RuleValueType;
     amount: number;
+    operator?: ComparisonOperator;
+    limitAmount?: number;
+    userConditions: PolicyCondition[];
     conditions?: {
         dropdownTypeId: string;
         optionId: string;
@@ -38,12 +49,17 @@ export interface ExpenseRule {
     }[];
 }
 
+export interface PolicyCondition {
+    propertyType: 'ROLE' | 'GRADE' | 'POSITION';
+    value: string;
+}
+
 export interface ExpensePolicy {
     id: string;
     name: string;
-    applicableRole: UserRole;
-    applicableGrade: Grade;
     description: string;
+    frequency: PolicyFrequency;
+    conditions: PolicyCondition[];
     rules: ExpenseRule[];
 }
 
@@ -173,19 +189,32 @@ export const mockPolicies: ExpensePolicy[] = [
     {
         id: '1',
         name: 'Standard Travel Policy',
-        applicableRole: 'EMPLOYEE',
-        applicableGrade: 'MS1',
         description: 'Standard policy for all travel related expenses',
-        rules: []
+        frequency: 'MONTHLY',
+        conditions: [
+            { propertyType: 'ROLE', value: 'EMPLOYEE' },
+            { propertyType: 'GRADE', value: 'MS1' }
+        ],
+        rules: [{
+            id: '1',
+            expenseTypeId: '1',
+            valueType: 'CONSTANT',
+            amount: 1000,
+            userConditions: [],
+            conditions: []
+        }]
     },
     {
         id: '2',
         name: 'Food & Dining Policy',
-        applicableRole: 'MANAGER',
-        applicableGrade: 'MS3',
         description: 'Policy covering all food and dining expenses',
+        frequency: 'DAILY',
+        conditions: [
+            { propertyType: 'ROLE', value: 'MANAGER' },
+            { propertyType: 'GRADE', value: 'MS3' }
+        ],
         rules: []
-    },
+    }
 ];
 
 export const mockExpenses: ExpenseReport[] = [

@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useExpense } from '../store/ExpenseContext';
+import { ExpensePolicy, User, PolicyCondition } from '../types/expense';
 
 const ExpenseForm: React.FC = () => {
     const { currentUser, policies, expenseTypes, addExpense } = useExpense();
@@ -48,12 +49,21 @@ const ExpenseForm: React.FC = () => {
     // Get active expense types
     const activeExpenseTypes = expenseTypes.filter(type => type.isActive);
 
+    const isUserEligibleForPolicy = (policy: ExpensePolicy, user: User) => {
+        return policy.conditions.every(condition => {
+            if (condition.propertyType === 'ROLE') {
+                return condition.value === user.role;
+            }
+            if (condition.propertyType === 'GRADE') {
+                return condition.value === user.grade;
+            }
+            return true; // For any other condition types
+        });
+    };
+
     // Get applicable policies for the current user
-    const applicablePolicies = policies.filter(
-        policy => currentUser?.role && currentUser?.grade ? 
-            policy.applicableRole === currentUser.role &&
-            policy.applicableGrade === currentUser.grade
-        : false
+    const applicablePolicies = policies.filter(policy => 
+        currentUser ? isUserEligibleForPolicy(policy, currentUser) : false
     );
 
     return (

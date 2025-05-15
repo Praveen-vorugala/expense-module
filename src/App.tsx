@@ -9,6 +9,7 @@ import PolicyManagement from './components/PolicyManagement';
 import ExpenseReports from './components/ExpenseReports';
 import ExpenseTypeManagement from './components/ExpenseTypeManagement';
 import DropdownTypesPage from './pages/DropdownTypesPage';
+import UserPropertiesPage from './pages/UserPropertiesPage';
 import './App.css';
 
 const ProtectedRoute: React.FC<{
@@ -95,6 +96,15 @@ const AppRoutes: React.FC = () => {
           element={
             <ProtectedRoute allowedRoles={['ADMIN']}>
               <DropdownTypesPage />
+            </ProtectedRoute>
+          }
+        />
+        
+        <Route
+          path="/user-properties"
+          element={
+            <ProtectedRoute allowedRoles={['ADMIN']}>
+              <UserPropertiesPage />
             </ProtectedRoute>
           }
         />
