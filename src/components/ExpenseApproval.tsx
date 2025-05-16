@@ -34,11 +34,9 @@ const ExpenseApproval: React.FC = () => {
 
     const getExpenseDetails = (expense: ExpenseReport) => {
         const policy = policies.find(p => p.id === expense.policyId);
-        const expenseType = expenseTypes.find(t => t.id === expense.expenseTypeId);
-
         return {
             policyName: policy?.name || 'Unknown Policy',
-            expenseTypeName: expenseType?.name || 'Unknown Type'
+            totalAmount: expense.expenses.reduce((sum, item) => sum + item.amount, 0)
         };
     };
 
@@ -57,20 +55,28 @@ const ExpenseApproval: React.FC = () => {
                                     </h3>
                                     <div className="mt-2 space-y-1 text-sm text-gray-500">
                                         <p>Policy: {details.policyName}</p>
-                                        <p>Type: {details.expenseTypeName}</p>
-                                        <p>Amount: ${expense.amount}</p>
+                                        <p>Total Amount: ${details.totalAmount.toFixed(2)}</p>
                                         <p>Date: {new Date(expense.date).toLocaleDateString()}</p>
-                                        <p>Description: {expense.description}</p>
-                                        <p>
-                                            <a
-                                                href={expense.receiptUrl}
-                                                target="_blank"
-                                                rel="noopener noreferrer"
-                                                className="text-indigo-600 hover:text-indigo-500"
-                                            >
-                                                View Receipt
-                                            </a>
-                                        </p>
+                                        <div className="mt-2">
+                                            <p className="font-medium">Expense Items:</p>
+                                            {expense.expenses.map((item, index) => (
+                                                <div key={index} className="ml-4 mt-1">
+                                                    <p>Type: {getExpenseTypeName(item.expenseTypeId)}</p>
+                                                    <p>Amount: ${item.amount.toFixed(2)}</p>
+                                                    <p>Description: {item.description}</p>
+                                                    <p>
+                                                        <a
+                                                            href={item.receiptUrl}
+                                                            target="_blank"
+                                                            rel="noopener noreferrer"
+                                                            className="text-indigo-600 hover:text-indigo-500"
+                                                        >
+                                                            View Receipt
+                                                        </a>
+                                                    </p>
+                                                </div>
+                                            ))}
+                                        </div>
                                     </div>
                                 </div>
                                 <div className="ml-4 flex space-x-2">

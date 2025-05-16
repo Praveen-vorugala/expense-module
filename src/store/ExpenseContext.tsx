@@ -15,7 +15,7 @@ import {
     DropdownOption
 } from '../types/expense';
 
-interface ExpenseContextType {
+export interface ExpenseContextType {
     currentUser: User | null;
     policies: ExpensePolicy[];
     expenses: ExpenseReport[];
@@ -23,7 +23,19 @@ interface ExpenseContextType {
     dropdownTypes: DropdownType[];
     login: (email: string) => void;
     logout: () => void;
-    addExpense: (expense: Omit<ExpenseReport, 'id' | 'status' | 'submittedAt'>) => void;
+    addExpense: (reportDate: string, policyId: string, expenses: { 
+        expenseTypeId: string;
+        amount: number;
+        description: string;
+        receiptUrl: string;
+        travelDetails?: {
+            fromCity: string;
+            toCity: string;
+            kilometers: number;
+            tripType: 'ONE_WAY' | 'TWO_WAY';
+            calculatedFare: number;
+        };
+    }[]) => void;
     updateExpenseStatus: (expenseId: string, status: ExpenseStatus, remarks?: string) => void;
     addPolicy: (policy: Omit<ExpensePolicy, 'id'>) => void;
     updatePolicy: (policy: ExpensePolicy) => void;
@@ -62,10 +74,25 @@ export const ExpenseProvider: React.FC<{ children: ReactNode }> = ({ children })
         // await fetch('/api/logout', { method: 'POST' });
     };
 
-    const addExpense = (expense: Omit<ExpenseReport, 'id' | 'status' | 'submittedAt'>) => {
+    const addExpense = (reportDate: string, policyId: string, expenseItems: {
+        expenseTypeId: string;
+        amount: number;
+        description: string;
+        receiptUrl: string;
+        travelDetails?: {
+            fromCity: string;
+            toCity: string;
+            kilometers: number;
+            tripType: 'ONE_WAY' | 'TWO_WAY';
+            calculatedFare: number;
+        };
+    }[]) => {
         const newExpense: ExpenseReport = {
-            ...expense,
             id: (expenses.length + 1).toString(),
+            employeeId: currentUser?.id || '',
+            date: reportDate,
+            policyId: policyId,
+            expenses: expenseItems,
             status: 'PENDING',
             submittedAt: new Date().toISOString()
         };

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { useExpense } from '../store/ExpenseContext';
 import { ExpensePolicy, User, PolicyCondition, ExpenseRule } from '../types/expense';
 
@@ -38,7 +38,7 @@ const CITY_DISTANCES: { [key: string]: { [key: string]: number } } = {
 const FARE_PER_KM = 2.8;
 
 const ReportForm: React.FC = () => {
-    const { currentUser, policies, expenseTypes } = useExpense();
+    const { currentUser, policies, expenseTypes, addExpense } = useExpense();
     const [reportDate, setReportDate] = useState(new Date().toISOString().split('T')[0]);
     const [expenses, setExpenses] = useState<ReportExpense[]>([]);
     const [currentExpense, setCurrentExpense] = useState<ReportExpense>({
@@ -175,6 +175,34 @@ const ReportForm: React.FC = () => {
         }
     };
 
+    const handleSubmitReport = () => {
+        if (!selectedPolicy || expenses.length === 0) return;
+        
+        addExpense(reportDate, selectedPolicy.id, expenses);
+        
+        // Reset form
+        setExpenses([]);
+        setCurrentExpense({
+            expenseTypeId: '',
+            amount: 0,
+            description: '',
+            receiptUrl: '',
+            date: new Date().toISOString().split('T')[0]
+        });
+        setTravelDetails({
+            fromCity: '',
+            toCity: '',
+            kilometers: 0,
+            tripType: 'ONE_WAY',
+            calculatedFare: 0
+        });
+    };
+
+    // Calculate total amount of all expenses
+    const totalAmount = useMemo(() => {
+        return expenses.reduce((sum, expense) => sum + expense.amount, 0);
+    }, [expenses]);
+
     if (!selectedPolicy) {
         return <div>Policy "New Policy for ms 1" not found.</div>;
     }
@@ -187,7 +215,7 @@ const ReportForm: React.FC = () => {
         <div className="bg-white shadow rounded-lg p-6">
             <div className="flex justify-between items-start mb-6">
                 <div>
-                    <h2 className="text-2xl font-bold">Create New Report</h2>
+                    <h2 className="text-2xl font-bold">Create New Report (Daily)</h2>
                 </div>
                 <div className="w-48">
                     <label className="block text-sm font-medium text-gray-700">
@@ -420,7 +448,12 @@ const ReportForm: React.FC = () => {
                 {/* Display Added Expenses */}
                 {expenses.length > 0 && (
                     <div className="border-t pt-4">
-                        <h3 className="text-lg font-medium mb-4">Added Expenses</h3>
+                        <div className="flex justify-between items-center mb-4">
+                            <h3 className="text-lg font-medium">Added Expenses</h3>
+                            <div className="text-lg font-semibold text-gray-900">
+                                Total: ₹{totalAmount.toFixed(2)}
+                            </div>
+                        </div>
                         <div className="space-y-3">
                             {expenses.map((expense, index) => (
                                 <div key={index} className="flex justify-between items-center bg-gray-50 p-3 rounded-lg">
@@ -438,15 +471,26 @@ const ReportForm: React.FC = () => {
                                             </div>
                                         )}
                                     </div>
-                                    <button
-                                        type="button"
-                                        onClick={() => handleRemoveExpense(index)}
-                                        className="text-red-600 hover:text-red-800"
-                                    >
-                                        Remove
-                                    </button>
+                                    <div className="flex items-center space-x-4">
+                                        <div className="text-sm font-medium text-gray-900">
+                                            ₹{expense.amount.toFixed(2)}
+                                        </div>
+                                        <button
+                                            type="button"
+                                            onClick={() => handleRemoveExpense(index)}
+                                            className="text-red-600 hover:text-red-800"
+                                        >
+                                            Remove
+                                        </button>
+                                    </div>
                                 </div>
                             ))}
+                        </div>
+                        <div className="mt-4 p-4 bg-gray-50 rounded-lg">
+                            <div className="flex justify-between items-center">
+                                <span className="text-lg font-medium text-gray-700">Report Total</span>
+                                <span className="text-xl font-bold text-gray-900">₹{totalAmount.toFixed(2)}</span>
+                            </div>
                         </div>
                     </div>
                 )}
@@ -456,16 +500,10 @@ const ReportForm: React.FC = () => {
                     <div className="border-t pt-4">
                         <button
                             type="button"
-                            onClick={() => {
-                                // We'll implement this in the next step
-                                console.log("Submit Report", {
-                                    policyId: selectedPolicy.id,
-                                    expenses
-                                });
-                            }}
+                            onClick={handleSubmitReport}
                             className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500"
                         >
-                            Submit Report
+                            Submit Report (Total: ₹{totalAmount.toFixed(2)})
                         </button>
                     </div>
                 )}

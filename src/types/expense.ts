@@ -63,15 +63,19 @@ export interface ExpensePolicy {
     rules: ExpenseRule[];
 }
 
+export interface ExpenseItem {
+    expenseTypeId: string;
+    amount: number;
+    description: string;
+    receiptUrl: string;
+}
+
 export interface ExpenseReport {
     id: string;
     employeeId: string;
     date: string;
     policyId: string;
-    expenseTypeId: string;
-    amount: number;
-    description: string;
-    receiptUrl: string;
+    expenses: ExpenseItem[];
     status: ExpenseStatus;
     submittedAt: string;
     approvedBy?: string;
@@ -304,24 +308,44 @@ export const mockExpenses: ExpenseReport[] = [
     {
         id: '1',
         employeeId: '3',
-        date: '2024-03-15',
+        date: '2025-05-15',
         policyId: '1',
-        expenseTypeId: '1',
-        amount: 850,
-        description: 'Flight to New York',
-        receiptUrl: '/mock-receipt-1.pdf',
+        expenses: [
+            {
+                expenseTypeId: '1',
+                amount: 850,
+                description: 'Flight to New York',
+                receiptUrl: '/mock-receipt-1.pdf',
+            },
+            {
+                expenseTypeId: '5',
+                amount: 200,
+                description: 'Meeting accommodation in New York',
+                receiptUrl: '/mock-receipt-1a.pdf',
+            }
+        ],
         status: 'PENDING',
         submittedAt: '2024-03-16T10:00:00Z'
     },
     {
         id: '2',
         employeeId: '3',
-        date: '2024-03-16',
+        date: '2025-05-16',
         policyId: '2',
-        expenseTypeId: '2',
-        amount: 75,
-        description: 'Client dinner',
-        receiptUrl: '/mock-receipt-2.pdf',
+        expenses: [
+            {
+                expenseTypeId: '2',
+                amount: 75,
+                description: 'Client dinner',
+                receiptUrl: '/mock-receipt-2.pdf',
+            },
+            {
+                expenseTypeId: '9',
+                amount: 30,
+                description: 'Local taxi to client office',
+                receiptUrl: '/mock-receipt-2a.pdf',
+            }
+        ],
         status: 'APPROVED',
         submittedAt: '2024-03-17T09:00:00Z',
         approvedBy: '2',

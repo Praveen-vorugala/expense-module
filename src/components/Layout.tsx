@@ -17,7 +17,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
         { name: 'Expense Types', href: '/expense-types', roles: ['ADMIN'] },
         { name: 'Dropdown Types', href: '/dropdown-types', roles: ['ADMIN'] },
         { name: 'User Properties', href: '/user-properties', roles: ['ADMIN'] },
-        { name: 'Reports', href: '/reports', roles: ['ADMIN'] },
+        { name: 'Reports', href: '/reports', roles: ['ADMIN','EMPLOYEE','MANAGER'] },
     ];
 
     const filteredNavigation = navigation.filter(item => 
